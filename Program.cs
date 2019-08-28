@@ -32,24 +32,66 @@ namespace XeroTechnicalTest
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Xero Tech Test!");
-            RegisterServices();
-            
+            bool endApp = false;
+            var container = RegisterServices();
+            var service = container.GetInstance<InvoiceService>();
 
-            //CreateInvoiceWithOneItem();
-            //CreateInvoiceWithMultipleItemsAndQuantities();
-            //RemoveItem();
-            //MergeInvoices();
-            //CloneInvoice();
-            //InvoiceToString();
+            Console.WriteLine("Welcome to Xero Tech Test!");
+
+            while (!endApp)
+            {
+                Console.WriteLine($"Please choose an operation (from the list below) to perform:{Environment.NewLine}" +
+                $"1. CreateInvoiceWithOneItem{Environment.NewLine}" +
+                $"2. CreateInvoiceWithMultipleItemsAndQuantities{Environment.NewLine}" +
+                $"3. RemoveItem{Environment.NewLine}" +
+                $"4. MergeInvoices{Environment.NewLine}" +
+                $"5. CloneInvoice{Environment.NewLine}" +
+                $"6. InvoiceToString{Environment.NewLine}" +
+                $"7. Exit Application");
+
+                var option = Console.ReadKey(true).Key;
+
+                switch (option)
+                {
+                    case ConsoleKey.D1:
+                        service.CreateInvoiceWithOneItem();
+                        break;
+                    case ConsoleKey.D2:
+                        service.CreateInvoiceWithMultipleItemsAndQuantities();
+                        break;
+                    case ConsoleKey.D3:
+                        service.RemoveItem();
+                        break;
+                    case ConsoleKey.D4:
+                        service.MergeInvoices();
+                        break;
+                    case ConsoleKey.D5:
+                        service.CloneInvoice();
+                        break;
+                    case ConsoleKey.D6:
+                        service.InvoiceToString();
+                        break;
+                    default:
+                        Environment.Exit(0);
+                        break;
+                }
+
+                Console.WriteLine("Press Enter to continue or Esc to exit the app");
+                if (Console.ReadKey(true).Key == ConsoleKey.Escape) endApp = true;
+                Console.Clear();
+            }
+
+            return;
         }
 
-        static void RegisterServices()
+        static Container RegisterServices()
         {
             // register loosely coupled classes
             var container = new Container();
             container.Register<IInvoiceOperations, InvoiceOperations>();
             container.Register<IInvoiceService, InvoiceService>();
+
+            return container;
         }
     }
 }

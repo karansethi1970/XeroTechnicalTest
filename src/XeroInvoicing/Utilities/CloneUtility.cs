@@ -1,54 +1,22 @@
-﻿/*Source: https://www.c-sharpcorner.com/UploadFile/ff2f08/deep-copy-of-object-in-C-Sharp/*/
+﻿/*Source: https://stackoverflow.com/questions/129389/how-do-you-do-a-deep-copy-of-an-object-in-net-c-specifically */
 
-using System;
-using System.Reflection;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace XeroInvoicing.Utilities
 {
     public class CloneUtility
     {
-        public static object CloneObject(object objSource)
+        public static T DeepClone<T>(T obj)
         {
-            //step : 1 Get the type of source object and create a new instance of that type
-            Type typeSource = objSource.GetType();
-            object objTarget = Activator.CreateInstance(typeSource);
-
-            //Step2 : Get all the properties of source object type
-            PropertyInfo[] propertyInfo = typeSource.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            //Step : 3 Assign all source property to taget object 's properties
-            foreach (PropertyInfo property in propertyInfo)
+            using (var ms = new MemoryStream())
             {
-                //Check whether property can be written to
-                if (property.CanWrite)
-                {
-                    //Step : 4 check whether property type is value type, enum or string type
-                    if (property.PropertyType.IsValueType || property.PropertyType.IsEnum || property.PropertyType.Equals(typeof(System.String)))
-                    {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
 
-                        property.SetValue(objTarget, property.GetValue(objSource, null), null);
-
-                    }
-
-                    //else property type is object/complex types, so need to recursively call this method until the end of the tree is reached
-                    else
-                    {
-                        object objPropertyValue = property.GetValue(objSource, null);
-
-                        if (objPropertyValue == null)
-                        {
-                            property.SetValue(objTarget, null, null);
-
-                        }
-                        else
-                        {
-                            property.SetValue(objTarget, CloneObject(objPropertyValue), null);
-                        }
-                    }
-                }
+                return (T)formatter.Deserialize(ms);
             }
-            return objTarget;
         }
-
     }
 }

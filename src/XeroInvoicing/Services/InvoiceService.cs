@@ -16,7 +16,10 @@ namespace XeroInvoicing.Services
 
         public void CreateInvoiceWithOneItem()
         {
-            var invoice = new Invoice();
+            var invoice = new Invoice
+            {
+                LineItems = new List<InvoiceLine>()
+            };
 
             _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
@@ -26,12 +29,15 @@ namespace XeroInvoicing.Services
                 Description = "Apple"
             });
 
-            Console.WriteLine(_invoiceOperations.GetTotal(invoice));
+            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
 
         public void CreateInvoiceWithMultipleItemsAndQuantities()
         {
-            var invoice = new Invoice();
+            var invoice = new Invoice
+            {
+                LineItems = new List<InvoiceLine>()
+            };
 
             _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
@@ -57,12 +63,15 @@ namespace XeroInvoicing.Services
                 Description = "Pineapple"
             });
 
-            Console.WriteLine(_invoiceOperations.GetTotal(invoice));
+            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
 
         public void RemoveItem()
         {
-            var invoice = new Invoice();
+            var invoice = new Invoice
+            {
+                LineItems = new List<InvoiceLine>()
+            };
 
             _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
@@ -81,12 +90,15 @@ namespace XeroInvoicing.Services
             });
 
             _invoiceOperations.RemoveInvoiceLine(invoice, 1);
-            Console.WriteLine(_invoiceOperations.GetTotal(invoice));
+            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
 
         public void MergeInvoices()
         {
-            var invoice1 = new Invoice();
+            var invoice1 = new Invoice
+            {
+                LineItems = new List<InvoiceLine>()
+            };
 
             _invoiceOperations.AddInvoiceLine(invoice1, new InvoiceLine()
             {
@@ -96,7 +108,10 @@ namespace XeroInvoicing.Services
                 Description = "Banana"
             });
 
-            var invoice2 = new Invoice();
+            var invoice2 = new Invoice
+            {
+                LineItems = new List<InvoiceLine>()
+            };
 
             _invoiceOperations.AddInvoiceLine(invoice2, new InvoiceLine()
             {
@@ -115,12 +130,15 @@ namespace XeroInvoicing.Services
             });
 
             _invoiceOperations.MergeInvoices(invoice1, invoice2);
-            Console.WriteLine(_invoiceOperations.GetTotal(invoice1));
+            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
         }
 
         public void CloneInvoice()
         {
-            var invoice = new Invoice();
+            var invoice = new Invoice
+            {
+                LineItems = new List<InvoiceLine>()
+            };
 
             _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
@@ -139,7 +157,7 @@ namespace XeroInvoicing.Services
             });
 
             var clonedInvoice = _invoiceOperations.Clone(invoice);
-            Console.WriteLine(_invoiceOperations.GetTotal(clonedInvoice));
+            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(clonedInvoice)}");
         }
 
         public void InvoiceToString()

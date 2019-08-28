@@ -1,5 +1,8 @@
-﻿namespace XeroTechnicalTest.XeroInvoicing
+﻿using System;
+
+namespace XeroTechnicalTest.XeroInvoicing
 {
+    [Serializable]
     public class InvoiceLine
     {
         public int InvoiceLineId { get; set; }

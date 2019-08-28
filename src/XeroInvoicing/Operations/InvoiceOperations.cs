@@ -47,7 +47,7 @@ namespace XeroInvoicing.Operations
         /// </summary>
         public Invoice Clone(Invoice invoice)
         {
-            var clonedInvoice = CloneUtility.CloneObject(invoice);
+            var clonedInvoice = CloneUtility.DeepClone(invoice);
             return clonedInvoice != null ?(Invoice)clonedInvoice: null;
         }
 
@@ -58,7 +58,7 @@ namespace XeroInvoicing.Operations
         public string ToString(Invoice invoice)
         {
             return $"Invoice Number: {invoice.InvoiceNumber}, " +
-                $"InvoiceDate: {invoice.InvoiceDate.ToString("DD/MM/YYYY")}, " +
+                $"InvoiceDate: {invoice.InvoiceDate.ToString("dd/MM/yyyy")}, " +
                 $"LineItemCount: {invoice.LineItems.Count}";
         }
     }
