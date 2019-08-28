@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using XeroInvoicing.Utilities;
 using XeroTechnicalTest.XeroInvoicing;
 
@@ -9,10 +10,12 @@ namespace XeroInvoicing.Operations
         /// <summary>
         /// Add new invoice using Invoice Line details
         /// </summary>
-        /// <param name="invoiceLine"></param>
-        public void AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine)
+        /// <param name="invoice">Invoice to modify</param>
+        /// <param name="invoiceLine">Invoice Line to add</param>
+        public async Task AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine)
         {
             invoice.LineItems.Add(invoiceLine);
+            await Task.Delay(100);
         }
 
         /// <summary>
@@ -28,6 +31,7 @@ namespace XeroInvoicing.Operations
         /// <summary>
         /// GetTotal should return the sum of (Cost * Quantity) for each line item
         /// </summary>
+        /// <param name="invoice">Invoice to get total tally for</param>
         public decimal GetTotal(Invoice invoice)
         {
             return invoice.LineItems.Sum(x => x.Cost * x.Quantity);
@@ -37,6 +41,7 @@ namespace XeroInvoicing.Operations
         /// MergeInvoices appends the items from the sourceInvoice to the current invoice
         /// </summary>
         /// <param name="sourceInvoice">Invoice to merge from</param>
+        /// <param name="currentInvoice">Invoice to merge to</param>
         public void MergeInvoices(Invoice sourceInvoice, Invoice currentInvoice)
         {
             currentInvoice.LineItems.AddRange(sourceInvoice.LineItems);
@@ -45,9 +50,10 @@ namespace XeroInvoicing.Operations
         /// <summary>
         /// Creates a deep clone of the current invoice (all fields and properties)
         /// </summary>
-        public Invoice Clone(Invoice invoice)
+        /// <param name="invoice">Invoice to clone</param>
+        public async Task<Invoice> Clone(Invoice invoice)
         {
-            var clonedInvoice = CloneUtility.DeepClone(invoice);
+            var clonedInvoice = await Task.FromResult<Invoice>(CloneUtility.DeepClone(invoice));
             return clonedInvoice != null ?(Invoice)clonedInvoice: null;
         }
 
@@ -55,6 +61,7 @@ namespace XeroInvoicing.Operations
         /// Outputs string containing the following (replace [] with actual values):
         /// Invoice Number: [InvoiceNumber], InvoiceDate: [DD/MM/YYYY], LineItemCount: [Number of items in LineItems] 
         /// </summary>
+        /// <param name="invoice">Invoice to get string from</param>
         public string ToString(Invoice invoice)
         {
             return $"Invoice Number: {invoice.InvoiceNumber}, " +

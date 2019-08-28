@@ -1,16 +1,18 @@
-﻿namespace XeroInvoicing.Services
+﻿using System.Threading.Tasks;
+
+namespace XeroInvoicing.Services
 {
     public interface IInvoiceService
     {
-        void CreateInvoiceWithOneItem();
+        Task CreateInvoiceWithOneItem();
 
-        void CreateInvoiceWithMultipleItemsAndQuantities();
+        Task CreateInvoiceWithMultipleItemsAndQuantities();
 
         void RemoveItem();
 
         void MergeInvoices();
 
-        void CloneInvoice();
+        Task CloneInvoice();
 
         void InvoiceToString();
     }

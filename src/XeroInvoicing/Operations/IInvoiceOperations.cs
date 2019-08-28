@@ -9,7 +9,7 @@ namespace XeroInvoicing.Operations
 {
     public interface IInvoiceOperations
     {
-        void AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine);
+        Task AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine);
 
         void RemoveInvoiceLine(Invoice invoice, int invoiceLineId);
 
@@ -17,7 +17,7 @@ namespace XeroInvoicing.Operations
 
         void MergeInvoices(Invoice sourceInvoice, Invoice currentInvoice);
 
-        Invoice Clone(Invoice invoice);
+        Task<Invoice> Clone(Invoice invoice);
 
         string ToString(Invoice invoice);
     }

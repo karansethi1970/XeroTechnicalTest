@@ -54,10 +54,10 @@ namespace XeroTechnicalTest
                 switch (option)
                 {
                     case ConsoleKey.D1:
-                        service.CreateInvoiceWithOneItem();
+                        service.CreateInvoiceWithOneItem().Wait();
                         break;
                     case ConsoleKey.D2:
-                        service.CreateInvoiceWithMultipleItemsAndQuantities();
+                        service.CreateInvoiceWithMultipleItemsAndQuantities().Wait();
                         break;
                     case ConsoleKey.D3:
                         service.RemoveItem();
@@ -66,7 +66,7 @@ namespace XeroTechnicalTest
                         service.MergeInvoices();
                         break;
                     case ConsoleKey.D5:
-                        service.CloneInvoice();
+                        service.CloneInvoice().Wait();
                         break;
                     case ConsoleKey.D6:
                         service.InvoiceToString();

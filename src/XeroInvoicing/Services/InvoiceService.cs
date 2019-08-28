@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using XeroInvoicing.Operations;
 using XeroTechnicalTest.XeroInvoicing;
 
@@ -14,14 +15,14 @@ namespace XeroInvoicing.Services
             _invoiceOperations = invoiceOperations;
         }
 
-        public void CreateInvoiceWithOneItem()
+        public async Task CreateInvoiceWithOneItem()
         {
             var invoice = new Invoice
             {
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 6.99m,
@@ -32,14 +33,14 @@ namespace XeroInvoicing.Services
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
 
-        public void CreateInvoiceWithMultipleItemsAndQuantities()
+        public async Task CreateInvoiceWithMultipleItemsAndQuantities()
         {
             var invoice = new Invoice
             {
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 10.21m,
@@ -47,7 +48,7 @@ namespace XeroInvoicing.Services
                 Description = "Banana"
             });
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 2,
                 Cost = 5.21m,
@@ -55,7 +56,7 @@ namespace XeroInvoicing.Services
                 Description = "Orange"
             });
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 3,
                 Cost = 5.21m,
@@ -133,14 +134,14 @@ namespace XeroInvoicing.Services
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
         }
 
-        public void CloneInvoice()
+        public async Task CloneInvoice()
         {
             var invoice = new Invoice
             {
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 6.99m,
@@ -148,7 +149,7 @@ namespace XeroInvoicing.Services
                 Description = "Apple"
             });
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 2,
                 Cost = 6.27m,
@@ -156,7 +157,7 @@ namespace XeroInvoicing.Services
                 Description = "Blueberries"
             });
 
-            var clonedInvoice = _invoiceOperations.Clone(invoice);
+            var clonedInvoice = await _invoiceOperations.Clone(invoice);
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(clonedInvoice)}");
         }
 
