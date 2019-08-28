@@ -43,6 +43,9 @@
   <ItemGroup>
     <Compile Include="Invoice.cs" />
     <Compile Include="InvoiceLine.cs" />
+    <Compile Include="Operations\IInvoiceOperations.cs" />
+    <Compile Include="Operations\InvoiceOperations.cs" />
+    <Compile Include="Services\IInvoiceService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

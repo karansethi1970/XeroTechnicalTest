@@ -21,7 +21,10 @@
     When you have finished the solution please zip it up and email it back to the recruiter or developer who sent it to you
 */
 
+using SimpleInjector;
 using System;
+using XeroInvoicing.Operations;
+using XeroInvoicing.Services;
 
 namespace XeroTechnicalTest
 {
@@ -30,6 +33,8 @@ namespace XeroTechnicalTest
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Xero Tech Test!");
+            Register();
+            
 
             //CreateInvoiceWithOneItem();
             //CreateInvoiceWithMultipleItemsAndQuantities();
@@ -37,6 +42,14 @@ namespace XeroTechnicalTest
             //MergeInvoices();
             //CloneInvoice();
             //InvoiceToString();
+        }
+
+        static void Register()
+        {
+            // register loosely coupled classes
+            var container = new Container();
+            container.Register<IInvoiceOperations, InvoiceOperations>();
+            container.Register<IInvoiceService, InvoiceService>();
         }
     }
 }

@@ -4,17 +4,16 @@ using XeroTechnicalTest.XeroInvoicing;
 
 namespace XeroInvoicing.Operations
 {
-    public class InvoiceOperations
+    public class InvoiceOperations: IInvoiceOperations
     {
-        public List<InvoiceLine> LineItems { get; set; }
 
         /// <summary>
         /// Add new invoice using Invoice Line details
         /// </summary>
         /// <param name="invoiceLine"></param>
-        public void AddInvoiceLine(InvoiceLine invoiceLine)
+        public void AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine)
         {
-            LineItems.Add(invoiceLine);
+            invoice.LineItems.Add(invoiceLine);
         }
 
         /// <summary>

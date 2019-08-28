@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using XeroInvoicing.Operations;
 using XeroTechnicalTest.XeroInvoicing;
 
-namespace XeroInvoicing
+namespace XeroInvoicing.Services
 {
-    public class InvoiceService
+    public class InvoiceService: IInvoiceService
     {
+        private IInvoiceOperations _invoiceOperations;
+
+        public InvoiceService(IInvoiceOperations invoiceOperations)
+        {
+            _invoiceOperations = invoiceOperations;
+        }
+
         public void CreateInvoiceWithOneItem()
         {
             var invoice = new Invoice();
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 6.99m,
@@ -18,14 +26,14 @@ namespace XeroInvoicing
                 Description = "Apple"
             });
 
-            Console.WriteLine(invoice.GetTotal());
+            Console.WriteLine(_invoiceOperations.GetTotal());
         }
 
         public void CreateInvoiceWithMultipleItemsAndQuantities()
         {
             var invoice = new Invoice();
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 10.21m,
@@ -33,7 +41,7 @@ namespace XeroInvoicing
                 Description = "Banana"
             });
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 2,
                 Cost = 5.21m,
@@ -41,7 +49,7 @@ namespace XeroInvoicing
                 Description = "Orange"
             });
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 3,
                 Cost = 5.21m,
@@ -49,14 +57,14 @@ namespace XeroInvoicing
                 Description = "Pineapple"
             });
 
-            Console.WriteLine(invoice.GetTotal());
+            Console.WriteLine(_invoiceOperations.GetTotal());
         }
 
         public void RemoveItem()
         {
             var invoice = new Invoice();
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 5.21m,
@@ -64,7 +72,7 @@ namespace XeroInvoicing
                 Description = "Orange"
             });
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 2,
                 Cost = 10.99m,
@@ -72,15 +80,15 @@ namespace XeroInvoicing
                 Description = "Banana"
             });
 
-            invoice.RemoveInvoiceLine(1);
-            Console.WriteLine(invoice.GetTotal());
+            _invoiceOperations.RemoveInvoiceLine(1);
+            Console.WriteLine(_invoiceOperations.GetTotal());
         }
 
         public void MergeInvoices()
         {
             var invoice1 = new Invoice();
 
-            invoice1.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice1, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 10.33m,
@@ -88,33 +96,33 @@ namespace XeroInvoicing
                 Description = "Banana"
             });
 
-            var invoice2 = new Invoice();
+            //var invoice2 = new Invoice();
 
-            invoice2.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 5.22m,
-                Quantity = 1,
-                Description = "Orange"
-            });
+            //invoice2.AddInvoiceLine(new InvoiceLine()
+            //{
+            //    InvoiceLineId = 2,
+            //    Cost = 5.22m,
+            //    Quantity = 1,
+            //    Description = "Orange"
+            //});
 
-            invoice2.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 3,
-                Cost = 6.27m,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
+            //invoice2.AddInvoiceLine(new InvoiceLine()
+            //{
+            //    InvoiceLineId = 3,
+            //    Cost = 6.27m,
+            //    Quantity = 3,
+            //    Description = "Blueberries"
+            //});
 
-            invoice1.MergeInvoices(invoice2);
-            Console.WriteLine(invoice1.GetTotal());
+            //invoice1.MergeInvoices(invoice2);
+            Console.WriteLine(_invoiceOperations.GetTotal());
         }
 
         public void CloneInvoice()
         {
             var invoice = new Invoice();
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 1,
                 Cost = 6.99m,
@@ -122,7 +130,7 @@ namespace XeroInvoicing
                 Description = "Apple"
             });
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
             {
                 InvoiceLineId = 2,
                 Cost = 6.27m,
@@ -130,8 +138,8 @@ namespace XeroInvoicing
                 Description = "Blueberries"
             });
 
-            var clonedInvoice = invoice.Clone();
-            Console.WriteLine(clonedInvoice.GetTotal());
+            var clonedInvoice = _invoiceOperations.Clone();
+            Console.WriteLine(_invoiceOperations.GetTotal());
         }
 
         public void InvoiceToString()

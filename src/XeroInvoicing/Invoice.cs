@@ -7,5 +7,7 @@ namespace XeroTechnicalTest.XeroInvoicing
     {
         public int InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
+
+        public List<InvoiceLine> LineItems { get; set; }
     }
 }
