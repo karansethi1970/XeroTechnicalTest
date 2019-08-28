@@ -11,14 +11,14 @@ namespace XeroInvoicing.Operations
     {
         void AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine);
 
-        void RemoveInvoiceLine(int invoiceLineId);
+        void RemoveInvoiceLine(Invoice invoice, int invoiceLineId);
 
-        decimal GetTotal();
+        decimal GetTotal(Invoice invoice);
 
-        void MergeInvoices(Invoice sourceInvoice);
+        void MergeInvoices(Invoice sourceInvoice, Invoice currentInvoice);
 
-        Invoice Clone();
+        Invoice Clone(Invoice invoice);
 
-        string ToString();
+        string ToString(Invoice invoice);
     }
 }

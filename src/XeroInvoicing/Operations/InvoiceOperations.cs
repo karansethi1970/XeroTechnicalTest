@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
+using XeroInvoicing.Utilities;
 using XeroTechnicalTest.XeroInvoicing;
 
 namespace XeroInvoicing.Operations
 {
     public class InvoiceOperations: IInvoiceOperations
     {
-
         /// <summary>
         /// Add new invoice using Invoice Line details
         /// </summary>
@@ -20,43 +19,47 @@ namespace XeroInvoicing.Operations
         /// Remove invoice using Invoice Line ID
         /// </summary>
         /// <param name="invoiceLineId"></param>
-        public void RemoveInvoiceLine(int invoiceLineId)
+        public void RemoveInvoiceLine(Invoice invoice, int invoiceLineId)
         {
-            throw new NotImplementedException();
+            var item = invoice.LineItems.FirstOrDefault(x => x.InvoiceLineId == invoiceLineId);
+            invoice.LineItems.Remove(item);
         }
 
         /// <summary>
         /// GetTotal should return the sum of (Cost * Quantity) for each line item
         /// </summary>
-        public decimal GetTotal()
+        public decimal GetTotal(Invoice invoice)
         {
-            throw new NotImplementedException();
+            return invoice.LineItems.Sum(x => x.Cost * x.Quantity);
         }
 
         /// <summary>
         /// MergeInvoices appends the items from the sourceInvoice to the current invoice
         /// </summary>
         /// <param name="sourceInvoice">Invoice to merge from</param>
-        public void MergeInvoices(Invoice sourceInvoice)
+        public void MergeInvoices(Invoice sourceInvoice, Invoice currentInvoice)
         {
-            throw new NotImplementedException();
+            currentInvoice.LineItems.AddRange(sourceInvoice.LineItems);
         }
 
         /// <summary>
         /// Creates a deep clone of the current invoice (all fields and properties)
         /// </summary>
-        public Invoice Clone()
+        public Invoice Clone(Invoice invoice)
         {
-            throw new NotImplementedException();
+            var clonedInvoice = CloneUtility.CloneObject(invoice);
+            return clonedInvoice != null ?(Invoice)clonedInvoice: null;
         }
 
         /// <summary>
         /// Outputs string containing the following (replace [] with actual values):
         /// Invoice Number: [InvoiceNumber], InvoiceDate: [DD/MM/YYYY], LineItemCount: [Number of items in LineItems] 
         /// </summary>
-        public override string ToString()
+        public string ToString(Invoice invoice)
         {
-            throw new NotImplementedException();
+            return $"Invoice Number: {invoice.InvoiceNumber}, " +
+                $"InvoiceDate: {invoice.InvoiceDate.ToString("DD/MM/YYYY")}, " +
+                $"LineItemCount: {invoice.LineItems.Count}";
         }
     }
 }

@@ -33,7 +33,7 @@ namespace XeroTechnicalTest
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Xero Tech Test!");
-            Register();
+            RegisterServices();
             
 
             //CreateInvoiceWithOneItem();
@@ -44,7 +44,7 @@ namespace XeroTechnicalTest
             //InvoiceToString();
         }
 
-        static void Register()
+        static void RegisterServices()
         {
             // register loosely coupled classes
             var container = new Container();

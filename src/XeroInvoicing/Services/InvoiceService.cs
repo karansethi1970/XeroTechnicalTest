@@ -26,7 +26,7 @@ namespace XeroInvoicing.Services
                 Description = "Apple"
             });
 
-            Console.WriteLine(_invoiceOperations.GetTotal());
+            Console.WriteLine(_invoiceOperations.GetTotal(invoice));
         }
 
         public void CreateInvoiceWithMultipleItemsAndQuantities()
@@ -57,7 +57,7 @@ namespace XeroInvoicing.Services
                 Description = "Pineapple"
             });
 
-            Console.WriteLine(_invoiceOperations.GetTotal());
+            Console.WriteLine(_invoiceOperations.GetTotal(invoice));
         }
 
         public void RemoveItem()
@@ -80,8 +80,8 @@ namespace XeroInvoicing.Services
                 Description = "Banana"
             });
 
-            _invoiceOperations.RemoveInvoiceLine(1);
-            Console.WriteLine(_invoiceOperations.GetTotal());
+            _invoiceOperations.RemoveInvoiceLine(invoice, 1);
+            Console.WriteLine(_invoiceOperations.GetTotal(invoice));
         }
 
         public void MergeInvoices()
@@ -96,26 +96,26 @@ namespace XeroInvoicing.Services
                 Description = "Banana"
             });
 
-            //var invoice2 = new Invoice();
+            var invoice2 = new Invoice();
 
-            //invoice2.AddInvoiceLine(new InvoiceLine()
-            //{
-            //    InvoiceLineId = 2,
-            //    Cost = 5.22m,
-            //    Quantity = 1,
-            //    Description = "Orange"
-            //});
+            _invoiceOperations.AddInvoiceLine(invoice2, new InvoiceLine()
+            {
+                InvoiceLineId = 2,
+                Cost = 5.22m,
+                Quantity = 1,
+                Description = "Orange"
+            });
 
-            //invoice2.AddInvoiceLine(new InvoiceLine()
-            //{
-            //    InvoiceLineId = 3,
-            //    Cost = 6.27m,
-            //    Quantity = 3,
-            //    Description = "Blueberries"
-            //});
+            _invoiceOperations.AddInvoiceLine(invoice2, new InvoiceLine()
+            {
+                InvoiceLineId = 3,
+                Cost = 6.27m,
+                Quantity = 3,
+                Description = "Blueberries"
+            });
 
-            //invoice1.MergeInvoices(invoice2);
-            Console.WriteLine(_invoiceOperations.GetTotal());
+            _invoiceOperations.MergeInvoices(invoice1, invoice2);
+            Console.WriteLine(_invoiceOperations.GetTotal(invoice1));
         }
 
         public void CloneInvoice()
@@ -138,8 +138,8 @@ namespace XeroInvoicing.Services
                 Description = "Blueberries"
             });
 
-            var clonedInvoice = _invoiceOperations.Clone();
-            Console.WriteLine(_invoiceOperations.GetTotal());
+            var clonedInvoice = _invoiceOperations.Clone(invoice);
+            Console.WriteLine(_invoiceOperations.GetTotal(clonedInvoice));
         }
 
         public void InvoiceToString()
@@ -160,7 +160,7 @@ namespace XeroInvoicing.Services
                 }
             };
 
-            Console.WriteLine(invoice.ToString());
+            Console.WriteLine(_invoiceOperations.ToString(invoice));
         }
     }
 }
