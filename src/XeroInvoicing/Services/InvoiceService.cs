@@ -57,14 +57,14 @@ namespace XeroInvoicing.Services
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
 
-        public void MergeInvoices()
+        public async Task MergeInvoices()
         {
             var invoice1 = new Invoice
             {
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLines(invoice1, new List<InvoiceLine>
+            await _invoiceOperations.AddInvoiceLines(invoice1, new List<InvoiceLine>
                  {
                      InvoiceLinesRepo.InvoiceLines.First()
                  });
@@ -74,12 +74,12 @@ namespace XeroInvoicing.Services
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLines(invoice2,
+            await _invoiceOperations.AddInvoiceLines(invoice2,
                 InvoiceLinesRepo.InvoiceLines
                 .Where(x => x.InvoiceLineId == 2 || x.InvoiceLineId == 3)
                 .ToList());
 
-            _invoiceOperations.MergeInvoices(invoice1, invoice2);
+            _invoiceOperations.MergeInvoices(invoice2, invoice1);
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
         }
 

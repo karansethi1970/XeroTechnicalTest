@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeroInvoicing", "src\XeroInvoicing\XeroInvoicing.csproj", "{BFA928E0-A1EF-464F-9A8E-84AC300F2609}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeroInvoicingTests", "src\XeroInvoicingTests\XeroInvoicingTests.csproj", "{6CB10033-82F2-4BD6-8BF2-3025DDB89ADE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{BFA928E0-A1EF-464F-9A8E-84AC300F2609}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFA928E0-A1EF-464F-9A8E-84AC300F2609}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA928E0-A1EF-464F-9A8E-84AC300F2609}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CB10033-82F2-4BD6-8BF2-3025DDB89ADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB10033-82F2-4BD6-8BF2-3025DDB89ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB10033-82F2-4BD6-8BF2-3025DDB89ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB10033-82F2-4BD6-8BF2-3025DDB89ADE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

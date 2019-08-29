@@ -10,7 +10,7 @@ namespace XeroInvoicing.Services
 
         Task RemoveItem();
 
-        void MergeInvoices();
+        Task MergeInvoices();
 
         Task CloneInvoice();
 

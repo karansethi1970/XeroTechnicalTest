@@ -71,7 +71,7 @@ namespace XeroTechnicalTest
                             service.RemoveItem().Wait();
                             break;
                         case ConsoleKey.D4:
-                            service.MergeInvoices();
+                            service.MergeInvoices().Wait();
                             break;
                         case ConsoleKey.D5:
                             service.CloneInvoice().Wait();
