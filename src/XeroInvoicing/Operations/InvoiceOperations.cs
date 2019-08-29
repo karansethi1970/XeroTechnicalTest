@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using XeroInvoicing.Utilities;
-using XeroTechnicalTest.XeroInvoicing;
+using XeroInvoicing.Models;
 
 namespace XeroInvoicing.Operations
 {
@@ -53,8 +53,15 @@ namespace XeroInvoicing.Operations
         /// <param name="invoice">Invoice to clone</param>
         public async Task<Invoice> Clone(Invoice invoice)
         {
-            var clonedInvoice = await Task.FromResult<Invoice>(CloneUtility.DeepClone(invoice));
-            return clonedInvoice != null ?(Invoice)clonedInvoice: null;
+            try
+            {
+                var clonedInvoice = await Task.FromResult(CloneUtility.DeepClone(invoice));
+                return clonedInvoice ?? null;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>

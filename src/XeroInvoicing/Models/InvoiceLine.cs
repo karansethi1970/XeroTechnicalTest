@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XeroTechnicalTest.XeroInvoicing
+namespace XeroInvoicing.Models
 {
     [Serializable]
     public class InvoiceLine

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XeroInvoicing.Operations;
-using XeroTechnicalTest.XeroInvoicing;
+using XeroInvoicing.Models;
+using System.IO;
 
 namespace XeroInvoicing.Services
 {
-    public class InvoiceService: IInvoiceService
+    public class InvoiceService : IInvoiceService
     {
         private IInvoiceOperations _invoiceOperations;
 
@@ -136,29 +137,40 @@ namespace XeroInvoicing.Services
 
         public async Task CloneInvoice()
         {
-            var invoice = new Invoice
+            try
             {
-                LineItems = new List<InvoiceLine>()
-            };
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+                await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+                {
+                    InvoiceLineId = 1,
+                    Cost = 6.99m,
+                    Quantity = 1,
+                    Description = "Apple"
+                });
+
+                await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+                {
+                    InvoiceLineId = 2,
+                    Cost = 6.27m,
+                    Quantity = 3,
+                    Description = "Blueberries"
+                });
+
+                var clonedInvoice = await _invoiceOperations.Clone(invoice);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(clonedInvoice)}");
+            }
+            catch (EndOfStreamException)
             {
-                InvoiceLineId = 1,
-                Cost = 6.99m,
-                Quantity = 1,
-                Description = "Apple"
-            });
-
-            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
+                throw;
+            }
+            catch (Exception ex)
             {
-                InvoiceLineId = 2,
-                Cost = 6.27m,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
-
-            var clonedInvoice = await _invoiceOperations.Clone(invoice);
-            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(clonedInvoice)}");
+                throw new Exception($"Invoice cloning failed. Details: {ex.Message}");
+            }
         }
 
         public void InvoiceToString()
