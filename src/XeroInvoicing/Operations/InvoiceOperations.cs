@@ -15,8 +15,15 @@ namespace XeroInvoicing.Operations
         /// <param name="invoiceLine">Invoice Line to add</param>
         public async Task AddInvoiceLines(Invoice invoice, List<InvoiceLine> invoiceLine)
         {
-            invoice.LineItems.AddRange(invoiceLine);
-            await Task.Delay(100);
+            try
+            {
+                invoice.LineItems.AddRange(invoiceLine);
+                await Task.Delay(100);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -25,8 +32,15 @@ namespace XeroInvoicing.Operations
         /// <param name="invoiceLineId"></param>
         public void RemoveInvoiceLine(Invoice invoice, int invoiceLineId)
         {
-            var item = invoice.LineItems.FirstOrDefault(x => x.InvoiceLineId == invoiceLineId);
-            invoice.LineItems.Remove(item);
+            try
+            {
+                var item = invoice.LineItems.FirstOrDefault(x => x.InvoiceLineId == invoiceLineId);
+                invoice.LineItems.Remove(item);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -35,7 +49,14 @@ namespace XeroInvoicing.Operations
         /// <param name="invoice">Invoice to get total tally for</param>
         public decimal GetTotal(Invoice invoice)
         {
-            return invoice.LineItems.Sum(x => x.Cost * x.Quantity);
+            try
+            {
+                return invoice.LineItems.Sum(x => x.Cost * x.Quantity);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -45,7 +66,14 @@ namespace XeroInvoicing.Operations
         /// <param name="currentInvoice">Invoice to merge to</param>
         public void MergeInvoices(Invoice sourceInvoice, Invoice currentInvoice)
         {
-            currentInvoice.LineItems.AddRange(sourceInvoice.LineItems);
+            try
+            {
+                currentInvoice.LineItems.AddRange(sourceInvoice.LineItems);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -72,9 +100,11 @@ namespace XeroInvoicing.Operations
         /// <param name="invoice">Invoice to get string from</param>
         public string ToString(Invoice invoice)
         {
-            return $"Invoice Number: {invoice.InvoiceNumber}, " +
+            return invoice != null 
+                ? $"Invoice Number: {invoice.InvoiceNumber}, " +
                 $"InvoiceDate: {invoice.InvoiceDate.ToString("dd/MM/yyyy")}, " +
-                $"LineItemCount: {invoice.LineItems.Count}";
+                $"LineItemCount: {invoice.LineItems.Count}"
+                : string.Empty;
         }
     }
 }

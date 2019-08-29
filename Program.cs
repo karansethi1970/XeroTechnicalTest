@@ -31,6 +31,7 @@ namespace XeroTechnicalTest
 {
     public class Program
     {
+        // logs are stored in current working directory i.e. /bin/Debug folder
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         static void Main(string[] args)
@@ -38,9 +39,6 @@ namespace XeroTechnicalTest
             bool endApp = false;
             var container = RegisterServices();
             var service = container.GetInstance<InvoiceService>();
-
-            // Set up a simple configuration that logs on the console.
-            //BasicConfigurator.Configure();
 
             Console.WriteLine("Welcome to Xero Tech Test!");
 
@@ -79,8 +77,11 @@ namespace XeroTechnicalTest
                         case ConsoleKey.D6:
                             service.InvoiceToString();
                             break;
-                        default:
+                        case ConsoleKey.D7:
                             Environment.Exit(0);
+                            break;
+                        default:
+                            Console.WriteLine("Please provide a valid input");
                             break;
                     }
 

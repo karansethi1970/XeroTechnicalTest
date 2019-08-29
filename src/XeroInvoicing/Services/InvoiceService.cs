@@ -20,67 +20,111 @@ namespace XeroInvoicing.Services
 
         public async Task CreateInvoiceWithOneItem()
         {
-            var invoice = new Invoice
+            try
             {
-                LineItems = new List<InvoiceLine>()
-            };
-
-            await _invoiceOperations.AddInvoiceLines(invoice,
-                new List<InvoiceLine>
+                var invoice = new Invoice
                 {
-                    InvoiceLinesRepo.InvoiceLines.First()
-                });
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+                await _invoiceOperations.AddInvoiceLines(invoice,
+                    new List<InvoiceLine>
+                    {
+                    InvoiceLinesRepo.InvoiceLines.First()
+                    });
+
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice creation failed. Details: {ex.Message}");
+            }
         }
 
         public async Task CreateInvoiceWithMultipleItemsAndQuantities()
         {
-            var invoice = new Invoice
+            try
             {
-                LineItems = new List<InvoiceLine>()
-            };
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
-            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+                await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice creation failed. Details: {ex.Message}");
+            }
         }
 
         public async Task RemoveItem()
         {
-            var invoice = new Invoice
+            try
             {
-                LineItems = new List<InvoiceLine>()
-            };
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
-            _invoiceOperations.RemoveInvoiceLine(invoice, 1);
-            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+                await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
+                _invoiceOperations.RemoveInvoiceLine(invoice, 1);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice line removal failed. Details: {ex.Message}");
+            }
         }
 
         public async Task MergeInvoices()
         {
-            var invoice1 = new Invoice
+            try
             {
-                LineItems = new List<InvoiceLine>()
-            };
+                var invoice1 = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            await _invoiceOperations.AddInvoiceLines(invoice1, new List<InvoiceLine>
+                await _invoiceOperations.AddInvoiceLines(invoice1, new List<InvoiceLine>
                  {
                      InvoiceLinesRepo.InvoiceLines.First()
                  });
 
-            var invoice2 = new Invoice
+                var invoice2 = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
+
+                await _invoiceOperations.AddInvoiceLines(invoice2,
+                    InvoiceLinesRepo.InvoiceLines
+                    .Where(x => x.InvoiceLineId == 2 || x.InvoiceLineId == 3)
+                    .ToList());
+
+                _invoiceOperations.MergeInvoices(invoice2, invoice1);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
+            }
+            catch (NullReferenceException)
             {
-                LineItems = new List<InvoiceLine>()
-            };
-
-            await _invoiceOperations.AddInvoiceLines(invoice2,
-                InvoiceLinesRepo.InvoiceLines
-                .Where(x => x.InvoiceLineId == 2 || x.InvoiceLineId == 3)
-                .ToList());
-
-            _invoiceOperations.MergeInvoices(invoice2, invoice1);
-            Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice merging failed. Details: {ex.Message}");
+            }
         }
 
         public async Task CloneInvoice()
