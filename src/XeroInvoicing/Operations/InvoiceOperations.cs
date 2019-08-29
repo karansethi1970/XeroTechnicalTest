@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using XeroInvoicing.Utilities;
 using XeroInvoicing.Models;
+using System.Collections.Generic;
 
 namespace XeroInvoicing.Operations
 {
@@ -12,9 +13,9 @@ namespace XeroInvoicing.Operations
         /// </summary>
         /// <param name="invoice">Invoice to modify</param>
         /// <param name="invoiceLine">Invoice Line to add</param>
-        public async Task AddInvoiceLine(Invoice invoice, InvoiceLine invoiceLine)
+        public async Task AddInvoiceLines(Invoice invoice, List<InvoiceLine> invoiceLine)
         {
-            invoice.LineItems.Add(invoiceLine);
+            invoice.LineItems.AddRange(invoiceLine);
             await Task.Delay(100);
         }
 

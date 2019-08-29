@@ -8,7 +8,7 @@ namespace XeroInvoicing.Services
 
         Task CreateInvoiceWithMultipleItemsAndQuantities();
 
-        void RemoveItem();
+        Task RemoveItem();
 
         void MergeInvoices();
 

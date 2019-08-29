@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using XeroInvoicing.Operations;
 using XeroInvoicing.Models;
 using System.IO;
+using XeroInvoicing.Repo;
+using System.Linq;
 
 namespace XeroInvoicing.Services
 {
@@ -23,13 +25,11 @@ namespace XeroInvoicing.Services
                 LineItems = new List<InvoiceLine>()
             };
 
-            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 6.99m,
-                Quantity = 1,
-                Description = "Apple"
-            });
+            await _invoiceOperations.AddInvoiceLines(invoice,
+                new List<InvoiceLine>
+                {
+                    InvoiceLinesRepo.InvoiceLines.First()
+                });
 
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
@@ -41,56 +41,18 @@ namespace XeroInvoicing.Services
                 LineItems = new List<InvoiceLine>()
             };
 
-            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 10.21m,
-                Quantity = 4,
-                Description = "Banana"
-            });
-
-            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 5.21m,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-            {
-                InvoiceLineId = 3,
-                Cost = 5.21m,
-                Quantity = 5,
-                Description = "Pineapple"
-            });
-
+            await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
 
-        public void RemoveItem()
+        public async Task RemoveItem()
         {
             var invoice = new Invoice
             {
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 5.21m,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 10.99m,
-                Quantity = 4,
-                Description = "Banana"
-            });
-
+            await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
             _invoiceOperations.RemoveInvoiceLine(invoice, 1);
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
         }
@@ -102,34 +64,20 @@ namespace XeroInvoicing.Services
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLine(invoice1, new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 10.33m,
-                Quantity = 4,
-                Description = "Banana"
-            });
+            _invoiceOperations.AddInvoiceLines(invoice1, new List<InvoiceLine>
+                 {
+                     InvoiceLinesRepo.InvoiceLines.First()
+                 });
 
             var invoice2 = new Invoice
             {
                 LineItems = new List<InvoiceLine>()
             };
 
-            _invoiceOperations.AddInvoiceLine(invoice2, new InvoiceLine()
-            {
-                InvoiceLineId = 2,
-                Cost = 5.22m,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            _invoiceOperations.AddInvoiceLine(invoice2, new InvoiceLine()
-            {
-                InvoiceLineId = 3,
-                Cost = 6.27m,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
+            _invoiceOperations.AddInvoiceLines(invoice2,
+                InvoiceLinesRepo.InvoiceLines
+                .Where(x => x.InvoiceLineId == 2 || x.InvoiceLineId == 3)
+                .ToList());
 
             _invoiceOperations.MergeInvoices(invoice1, invoice2);
             Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
@@ -144,21 +92,7 @@ namespace XeroInvoicing.Services
                     LineItems = new List<InvoiceLine>()
                 };
 
-                await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-                {
-                    InvoiceLineId = 1,
-                    Cost = 6.99m,
-                    Quantity = 1,
-                    Description = "Apple"
-                });
-
-                await _invoiceOperations.AddInvoiceLine(invoice, new InvoiceLine()
-                {
-                    InvoiceLineId = 2,
-                    Cost = 6.27m,
-                    Quantity = 3,
-                    Description = "Blueberries"
-                });
+                await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
 
                 var clonedInvoice = await _invoiceOperations.Clone(invoice);
                 Console.WriteLine($"Total: {_invoiceOperations.GetTotal(clonedInvoice)}");
@@ -181,13 +115,7 @@ namespace XeroInvoicing.Services
                 InvoiceNumber = 1000,
                 LineItems = new List<InvoiceLine>()
                 {
-                    new InvoiceLine()
-                    {
-                        InvoiceLineId = 1,
-                        Cost = 6.99m,
-                        Quantity = 1,
-                        Description = "Apple"
-                    }
+                    InvoiceLinesRepo.InvoiceLines.First()
                 }
             };
 

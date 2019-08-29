@@ -68,7 +68,7 @@ namespace XeroTechnicalTest
                             service.CreateInvoiceWithMultipleItemsAndQuantities().Wait();
                             break;
                         case ConsoleKey.D3:
-                            service.RemoveItem();
+                            service.RemoveItem().Wait();
                             break;
                         case ConsoleKey.D4:
                             service.MergeInvoices();
