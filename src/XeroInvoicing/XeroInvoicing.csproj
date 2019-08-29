@@ -41,10 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Invoice.cs" />
-    <Compile Include="InvoiceLine.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\InvoiceLine.cs" />
+    <Compile Include="Operations\IInvoiceOperations.cs" />
+    <Compile Include="Operations\InvoiceOperations.cs" />
+    <Compile Include="Repo\InvoiceLinesRepo.cs" />
+    <Compile Include="Services\IInvoiceService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\CloneUtility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

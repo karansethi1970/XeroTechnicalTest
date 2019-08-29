@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("XeroTechnicalTest")]
+[assembly: AssemblyTitle("XeroInvoicingTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Xero")]
-[assembly: AssemblyProduct("XeroTechnicalTest")]
-[assembly: AssemblyCopyright("Copyright © Xero 2015")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("XeroInvoicingTests")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("93d8b92b-7dd7-4ead-a0ca-86267f1d5071")]
+[assembly: Guid("6cb10033-82f2-4bd6-8bf2-3025ddb89ade")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,7 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-
-// logging
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]

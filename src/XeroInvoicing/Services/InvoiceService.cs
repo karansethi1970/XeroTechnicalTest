@@ -1,137 +1,154 @@
 ﻿using System;
 using System.Collections.Generic;
-using XeroTechnicalTest.XeroInvoicing;
+using System.Threading.Tasks;
+using XeroInvoicing.Operations;
+using XeroInvoicing.Models;
+using System.IO;
+using XeroInvoicing.Repo;
+using System.Linq;
 
-namespace XeroInvoicing
+namespace XeroInvoicing.Services
 {
-    public class InvoiceService
+    public class InvoiceService : IInvoiceService
     {
-        public void CreateInvoiceWithOneItem()
+        private IInvoiceOperations _invoiceOperations;
+
+        public InvoiceService(IInvoiceOperations invoiceOperations)
         {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
-            {
-                InvoiceLineId = 1,
-                Cost = 6.99m,
-                Quantity = 1,
-                Description = "Apple"
-            });
-
-            Console.WriteLine(invoice.GetTotal());
+            _invoiceOperations = invoiceOperations;
         }
 
-        public void CreateInvoiceWithMultipleItemsAndQuantities()
+        public async Task CreateInvoiceWithOneItem()
         {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
+            try
             {
-                InvoiceLineId = 1,
-                Cost = 10.21m,
-                Quantity = 4,
-                Description = "Banana"
-            });
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+                await _invoiceOperations.AddInvoiceLines(invoice,
+                    new List<InvoiceLine>
+                    {
+                    InvoiceLinesRepo.InvoiceLines.First()
+                    });
+
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+            }
+            catch (NullReferenceException)
             {
-                InvoiceLineId = 2,
-                Cost = 5.21m,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            invoice.AddInvoiceLine(new InvoiceLine()
+                throw;
+            }
+            catch (Exception ex)
             {
-                InvoiceLineId = 3,
-                Cost = 5.21m,
-                Quantity = 5,
-                Description = "Pineapple"
-            });
-
-            Console.WriteLine(invoice.GetTotal());
+                throw new Exception($"Invoice creation failed. Details: {ex.Message}");
+            }
         }
 
-        public void RemoveItem()
+        public async Task CreateInvoiceWithMultipleItemsAndQuantities()
         {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
+            try
             {
-                InvoiceLineId = 1,
-                Cost = 5.21m,
-                Quantity = 1,
-                Description = "Orange"
-            });
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+                await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+            }
+            catch (NullReferenceException)
             {
-                InvoiceLineId = 2,
-                Cost = 10.99m,
-                Quantity = 4,
-                Description = "Banana"
-            });
-
-            invoice.RemoveInvoiceLine(1);
-            Console.WriteLine(invoice.GetTotal());
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice creation failed. Details: {ex.Message}");
+            }
         }
 
-        public void MergeInvoices()
+        public async Task RemoveItem()
         {
-            var invoice1 = new Invoice();
-
-            invoice1.AddInvoiceLine(new InvoiceLine()
+            try
             {
-                InvoiceLineId = 1,
-                Cost = 10.33m,
-                Quantity = 4,
-                Description = "Banana"
-            });
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            var invoice2 = new Invoice();
-
-            invoice2.AddInvoiceLine(new InvoiceLine()
+                await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
+                _invoiceOperations.RemoveInvoiceLine(invoice, 1);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice)}");
+            }
+            catch (NullReferenceException)
             {
-                InvoiceLineId = 2,
-                Cost = 5.22m,
-                Quantity = 1,
-                Description = "Orange"
-            });
-
-            invoice2.AddInvoiceLine(new InvoiceLine()
+                throw;
+            }
+            catch (Exception ex)
             {
-                InvoiceLineId = 3,
-                Cost = 6.27m,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
-
-            invoice1.MergeInvoices(invoice2);
-            Console.WriteLine(invoice1.GetTotal());
+                throw new Exception($"Invoice line removal failed. Details: {ex.Message}");
+            }
         }
 
-        public void CloneInvoice()
+        public async Task MergeInvoices()
         {
-            var invoice = new Invoice();
-
-            invoice.AddInvoiceLine(new InvoiceLine()
+            try
             {
-                InvoiceLineId = 1,
-                Cost = 6.99m,
-                Quantity = 1,
-                Description = "Apple"
-            });
+                var invoice1 = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
 
-            invoice.AddInvoiceLine(new InvoiceLine()
+                await _invoiceOperations.AddInvoiceLines(invoice1, new List<InvoiceLine>
+                 {
+                     InvoiceLinesRepo.InvoiceLines.First()
+                 });
+
+                var invoice2 = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
+
+                await _invoiceOperations.AddInvoiceLines(invoice2,
+                    InvoiceLinesRepo.InvoiceLines
+                    .Where(x => x.InvoiceLineId == 2 || x.InvoiceLineId == 3)
+                    .ToList());
+
+                _invoiceOperations.MergeInvoices(invoice2, invoice1);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(invoice1)}");
+            }
+            catch (NullReferenceException)
             {
-                InvoiceLineId = 2,
-                Cost = 6.27m,
-                Quantity = 3,
-                Description = "Blueberries"
-            });
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice merging failed. Details: {ex.Message}");
+            }
+        }
 
-            var clonedInvoice = invoice.Clone();
-            Console.WriteLine(clonedInvoice.GetTotal());
+        public async Task CloneInvoice()
+        {
+            try
+            {
+                var invoice = new Invoice
+                {
+                    LineItems = new List<InvoiceLine>()
+                };
+
+                await _invoiceOperations.AddInvoiceLines(invoice, InvoiceLinesRepo.InvoiceLines);
+
+                var clonedInvoice = await _invoiceOperations.Clone(invoice);
+                Console.WriteLine($"Total: {_invoiceOperations.GetTotal(clonedInvoice)}");
+            }
+            catch (EndOfStreamException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Invoice cloning failed. Details: {ex.Message}");
+            }
         }
 
         public void InvoiceToString()
@@ -142,17 +159,11 @@ namespace XeroInvoicing
                 InvoiceNumber = 1000,
                 LineItems = new List<InvoiceLine>()
                 {
-                    new InvoiceLine()
-                    {
-                        InvoiceLineId = 1,
-                        Cost = 6.99m,
-                        Quantity = 1,
-                        Description = "Apple"
-                    }
+                    InvoiceLinesRepo.InvoiceLines.First()
                 }
             };
 
-            Console.WriteLine(invoice.ToString());
+            Console.WriteLine(_invoiceOperations.ToString(invoice));
         }
     }
 }
